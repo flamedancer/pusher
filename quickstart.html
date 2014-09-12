@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta name="http-equiv" content="Content-type: text/html; charset=UTF-8"/>
+
+<head>
+	<!--[if lt IE 9]>
+		<script type="text/javascript" src="js/contrib/flashcanvas.js"></script>
+	<![endif]-->
+		
+	<!-- ***** load the jsGameSoup library and define our game objects and launch function ***** -->
+	
+	<script src="js/jsgamesoup.js"></script>
+    <script src="js/main.js"></script> <!-- defines init() -->
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
+	
+
+	<!-- ***** iPod/iPad and Android compatibility ***** -->
+
+	<!-- icon for the ipod -->
+	<link rel="apple-touch-icon" href="ipod-icon.png">
+	<!-- this is a web app -->
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<!-- default size apple viewport -->
+	<meta name="viewport" content="width=850">
+	<!-- app style status bar -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<style type="text/css">
+	<!--
+		* {
+			/* disable callout sheet */
+			-webkit-touch-callout: none;
+			/* disable highlighting links when tapped */
+			-webkit-tap-highlight-color: rgba(0,0,0,0);
+			/* prevent automatic resizing of text */
+			-webkit-text-size-adjust: none;
+			/* disable copy paste */
+			-webkit-user-select: none;
+		}
+		
+		/* allow copy paste for some elements */
+		.copypaste {
+			-webkit-user-select: text;
+		}
+	-->
+	</style>
+</head>
+<body onload="launch();">
+	<canvs id='surface'></canvas>
+</body>
+</html>

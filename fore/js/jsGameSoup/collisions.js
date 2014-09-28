@@ -49,6 +49,28 @@ collide.collide_aabb_entities = function(a, b) {
 collide.aabb = collide.collideall(collide.collide_aabb_entities, "aabb");
 
 /**
+	Axis-aligned bounding-box collision between two arrays of entities. This expects entities to have a method called get_collision_aabb() which should return a rectangle of the boundaries of the entity with the form [x, y, w, h].
+	@param a is an array of entities
+	@param b is an array of entities that will be collided with those in group a
+*/
+collide.aabb_no_side = function() {};
+
+collide.collide_aabb_no_side_entities = function(a, b) {
+	if (b.get_collision_aabb && a.get_collision_aabb) {
+		var aaabb = a.get_collision_aabb();
+		var baabb = b.get_collision_aabb();
+		
+		return (!(aaabb[0] >= baabb[0] + baabb[2] || 
+		baabb[0] >= aaabb[0] + aaabb[2] || 
+		aaabb[1] >= baabb[1] + baabb[3] || 
+		baabb[1] >= aaabb[1] + aaabb[3]));
+	}
+}
+
+collide.aabb_no_side = collide.collideall(collide.collide_aabb_no_side_entities, "aabb_no_side");
+
+
+/**
 	Circle collision test between two groups of entities. This expects entities to have a method called get_collision_circle() which should return the center of the circle and the radius like this: return [[x, y], r].
 	@param a is an array of entities
 	@param b is an array of entities that will be collided with those in group a

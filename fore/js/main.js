@@ -142,15 +142,15 @@ function main(gs) {
                     this.y -= this.direction[1] * this.speed;
                 }
                 else {
-                    document.getElementById("gameover").style.paddingTop = gs.height / 2 - 100;
-                    document.getElementById("gameover").style.display = "block";
+                    //document.getElementById("gameover").style.paddingTop = gs.height / 2 - 100;
+                    document.getElementById("lose").style.display = "block";
                 }
             }
         }
 
         this.destroy = function() {
-            document.getElementById("gameover").style.paddingTop = gs.height / 2 - 100;
-            document.getElementById("gameover").style.display = "block";
+            //document.getElementById("gameover").style.paddingTop = gs.height / 2 - 100;
+            document.getElementById("lose").style.display = "block";
         }
         
     }
@@ -243,15 +243,15 @@ function main(gs) {
                     this.y -= this.direction[1] * this.speed;
                 }
                 else {
-                    document.getElementById("gameover").style.paddingTop = gs.height / 2 - 100;
-                    document.getElementById("gameover").style.display = "block";
+                    //document.getElementById("gameover").style.paddingTop = gs.height / 2 - 100;
+                    document.getElementById("win").style.display = "block";
                 }
             }
         }
 
         this.destroy = function() {
-            document.getElementById("gameover").style.paddingTop = gs.height / 2 - 100;
-            document.getElementById("gameover").style.display = "block";
+            //document.getElementById("gameover").style.paddingTop = gs.height / 2 - 100;
+            document.getElementById("win").style.display = "block";
         }
       
     }

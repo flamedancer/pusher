@@ -39,17 +39,25 @@ function main(gs) {
 
         this.direction = [0, 0]; 
 
-        this.set_locate = function(locate) {
+        this.set_pic_locate = function(locate) {
             this.x = parseInt(locate / 20) * pic;
             this.y = (locate % 20) * pic;
         }
 
-        this.set_locate(locate);
+        this.set_pic_locate(locate);
 
         this.set_uid = function(id) {
             this.uid = id;
         }
 
+        this.get_locate = function(x, y) {
+            return [this.x, this.y];
+        }
+
+        this.set_locate = function(x, y) {
+            this.x = x;
+            this.y = y;
+        }
 
         this.keyHeld_40 = this.keyDown_40 = function(){
             s.send('{"c":"d"}');
@@ -95,6 +103,7 @@ function main(gs) {
             this.direction = [0, 0];
         } 
 
+        var sync_flag = 0;
         this.update = function() {
             this.x += this.direction[0] * this.speed;
             this.y += this.direction[1] * this.speed;
@@ -121,6 +130,12 @@ function main(gs) {
                 this.y = 0;
             else if (this.y + pic > HEIGHT)
                 this.y = this.y - this.speed;
+
+            sync_flag = sync_flag - 1;
+            if(sync_flag <= 0) {
+                this.asyn();
+                sync_flag = 30;
+            } 
         }
         
         this.draw = function(c) {
@@ -152,6 +167,10 @@ function main(gs) {
             //document.getElementById("gameover").style.paddingTop = gs.height / 2 - 100;
             document.getElementById("lose").style.display = "block";
         }
+
+        this.asyn = function() {
+            s.send('{"c":"sync","locate":[' + this.get_locate().toString() + ']}' );
+        }
         
     }
 
@@ -165,12 +184,17 @@ function main(gs) {
         //var all_directions = [[0, -1], [0, 1], [-1, 0], [1, 0]];
         //this.direction = all_directions[Math.floor(Math.random() * 4)]
 
-        this.set_locate = function(locate) {
+        this.set_pic_locate = function(locate) {
             this.x = parseInt(locate / 20) * pic;
             this.y = (locate % 20) * pic;
         }
 
-        this.set_locate(locate);
+        this.set_pic_locate(locate);
+
+        this.set_locate = function(x, y) {
+            this.x = x;
+            this.y = y;
+        }
 
         this.set_uid = function(id) {
             this.uid = id;
@@ -257,21 +281,35 @@ function main(gs) {
     }
 
 
-    function Box(locate) {
+    function Box(id, locate) {
         this.type = t_box;
         this.direction = [0, 0];
         this.speed = 6;
 
+        this.id = id;
 
-        this.x = parseInt(locate / 20) * pic;
-        this.y = (locate % 20) * pic;
+        this.set_pic_locate = function(locate) {
+            this.x = parseInt(locate / 20) * pic;
+            this.y = (locate % 20) * pic;
+        }
 
+        this.set_pic_locate(locate);
+
+        this.get_locate = function(x, y) {
+            return [this.x, this.y];
+        }
+
+        this.set_locate = function(x, y) {
+            this.x = x;
+            this.y = y;
+        }
 
         this.walk_back = function() {
             this.x -= this.direction[0] * this.speed;
             this.y -= this.direction[1] * this.speed;
         }
 
+        var sync_flag = 30;
         this.update = function() {
             this.x += this.direction[0] * this.speed;
             this.y += this.direction[1] * this.speed;
@@ -293,6 +331,12 @@ function main(gs) {
                 this.y = HEIGHT;
             if (this.y > HEIGHT)
                 this.y = 0;
+
+            sync_flag = sync_flag - 1;
+            if(sync_flag <= 0) {
+                this.asyn();
+                sync_flag = 30;
+            } 
         }
 
         this.draw = function(c) {
@@ -301,6 +345,7 @@ function main(gs) {
             c.rect(this.x, this.y, pic, pic);
             c.closePath();
             c.fill();
+
         }
 
         this.get_collision_aabb = function () {
@@ -313,7 +358,7 @@ function main(gs) {
                     this.direction = who.direction;
                     for (var b in boxes) {
                         var be = boxes[b]; 
-                        if (this != be && collide.collide_aabb_no_side_entities(this, be)) {
+                        if (this != be &&collide.collide_aabb_no_side_entities(this, be)) {
                             this.direction = [0, 0];
                             break;
                         }
@@ -333,6 +378,10 @@ function main(gs) {
                 }
             }
         }
+        
+        this.asyn = function() {
+            s.send('{"c":"sync_box", "box_id":' + this.id.toString() + ',"box_locate":[' + this.get_locate().toString() + ']}' );
+        }
 
         this.destroy = function(c) {
             this.x = -100;
@@ -347,18 +396,18 @@ function main(gs) {
         this.init_world = function(data) {
             
             if (pusher.uid == "pusher_1") {
-                pusher.set_locate(data.pusher_1);
-                pusher2.set_locate(data.pusher_2);
+                pusher.set_pic_locate(data.pusher_1);
+                pusher2.set_pic_locate(data.pusher_2);
             } 
             else {
-                pusher.set_locate(data.pusher_2);
-                pusher2.set_locate(data.pusher_1);
+                pusher.set_pic_locate(data.pusher_2);
+                pusher2.set_pic_locate(data.pusher_1);
             }
 
             boxes_num = data.boxes.length;
             for (var a=0; a<boxes_num; a++) {
                 var locate = data.boxes[a];
-                boxes.push(gs.addEntity(new Box(locate)));
+                boxes.push(gs.addEntity(new Box(a, locate)));
             }
             gs.addEntity(pusher);
             gs.addEntity(pusher2);
@@ -392,28 +441,42 @@ function main(gs) {
             document.getElementById("wait").style.display = "none";
             return;
         }
-        if (obj.uid == pusher.uid)
-            var envoy = pusher;         
-        else {
-            var envoy = pusher2;
+        else if (cmd == 'sync_box') { // sync this box location
+            var box_id = obj.box_id; 
+            var box_locate = obj.box_locate;
+            boxes[box_id].set_locate(box_locate[0], box_locate[1]);
         }
-    
-        switch (cmd) {
-            case 'l':  // left
-                envoy.go_left(); 
-                break;
-            case 'u':  // up
-                envoy.go_up();
-                break;
-            case 'd':  // down
-                envoy.go_down();
-                break;
-            case 'r':  // right 
-                envoy.go_right();
-                break;
-            case 's':  // stop
-                envoy.stop();
-                break;
+        else {
+            if (obj.uid == pusher.uid) {
+                var envoy = pusher;         
+                var opponent = pusher2;
+            }
+            else {
+                var envoy = pusher2;
+                var opponent = pusher;
+            }
+        
+            switch (cmd) {
+                case 'l':  // left
+                    envoy.go_left(); 
+                    break;
+                case 'u':  // up
+                    envoy.go_up();
+                    break;
+                case 'd':  // down
+                    envoy.go_down();
+                    break;
+                case 'r':  // right 
+                    envoy.go_right();
+                    break;
+                case 's':  // stop
+                    envoy.stop();
+                    break;
+                case 'sync':  // sync oponent location
+                    var locate = obj.locate;
+                    opponent.set_locate(locate[0], locate[1]);
+                    break;
+            }
         }
     }
 

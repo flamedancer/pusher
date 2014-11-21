@@ -76,6 +76,7 @@ def deal_msg(player, msg):
             player.send(msg_dict)
             player.broad(init_world_msg())
     else:
+        print msg_dict 
         player.broad(msg_dict)
 
     
@@ -88,7 +89,6 @@ def init_world_msg():
         'pusher_2': all_locations[1],
         'boxes': all_locations[2:],
     }
-    print data
     return data
     
 

@@ -449,11 +449,9 @@ function main(gs) {
         else {
             if (obj.uid == pusher.uid) {
                 var envoy = pusher;         
-                var opponent = pusher2;
             }
             else {
                 var envoy = pusher2;
-                var opponent = pusher;
             }
         
             switch (cmd) {
@@ -474,7 +472,7 @@ function main(gs) {
                     break;
                 case 'sync':  // sync oponent location
                     var locate = obj.locate;
-                    opponent.set_locate(locate[0], locate[1]);
+                    envoy.set_locate(locate[0], locate[1]);
                     break;
             }
         }

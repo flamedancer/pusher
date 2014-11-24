@@ -25,6 +25,10 @@ class Player(object):
     def send(self, msg):
         self.ws.send(json.dumps(msg)) 
 
+    def send_opponent(self, msg):
+        msg.update({"uid": self.uid})
+        self.opponent.send(msg)
+
     def broad(self, msg):
         msg.update({"uid": self.uid})
         self.send(msg)
@@ -75,6 +79,8 @@ def deal_msg(player, msg):
             msg_dict.update({"uid": player.uid})
             player.send(msg_dict)
             player.broad(init_world_msg())
+    elif command == "sync":
+        player.send_opponent(msg_dict)
     else:
         print msg_dict 
         player.broad(msg_dict)

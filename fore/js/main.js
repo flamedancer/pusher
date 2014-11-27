@@ -134,7 +134,7 @@ function main(gs) {
             sync_flag = sync_flag - 1;
             if(sync_flag <= 0) {
                 this.asyn();
-                sync_flag = 30;
+                sync_flag = 60;
             } 
         }
         
@@ -164,7 +164,8 @@ function main(gs) {
         }
 
         this.destroy = function() {
-            //document.getElementById("gameover").style.paddingTop = gs.height / 2 - 100;
+            //document.getElementById("lose").style.paddingTop = gs.height / 2 - 100;
+            document.getElementById("surface").style.display = "none";
             document.getElementById("lose").style.display = "block";
         }
 
@@ -275,6 +276,7 @@ function main(gs) {
 
         this.destroy = function() {
             //document.getElementById("gameover").style.paddingTop = gs.height / 2 - 100;
+            document.getElementById("surface").style.display = "none";
             document.getElementById("win").style.display = "block";
         }
       
@@ -285,6 +287,7 @@ function main(gs) {
         this.type = t_box;
         this.direction = [0, 0];
         this.speed = 6;
+        this.travel = 0;
 
         this.id = id;
 
@@ -309,10 +312,11 @@ function main(gs) {
             this.y -= this.direction[1] * this.speed;
         }
 
-        var sync_flag = 30;
+        var sync_flag = 0;
         this.update = function() {
             this.x += this.direction[0] * this.speed;
             this.y += this.direction[1] * this.speed;
+            this.travel = this.travel + 1;
             for (var b in boxes) {
                 var be = boxes[b]; 
                 if (this != be && collide.collide_aabb_no_side_entities(this, be)) {
@@ -331,11 +335,13 @@ function main(gs) {
                 this.y = HEIGHT;
             if (this.y > HEIGHT)
                 this.y = 0;
+            if (this.travel >= 150) 
+                this.direction = [0, 0];
 
             sync_flag = sync_flag - 1;
             if(sync_flag <= 0) {
                 this.asyn();
-                sync_flag = 30;
+                sync_flag = 600;
             } 
         }
 
@@ -356,6 +362,7 @@ function main(gs) {
             if (who.type == t_pusher) {
                 if (this.direction[0] == 0 && this.direction[1] == 0) {
                     this.direction = who.direction;
+                    this.travel = 0;
                     for (var b in boxes) {
                         var be = boxes[b]; 
                         if (this != be &&collide.collide_aabb_no_side_entities(this, be)) {

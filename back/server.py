@@ -60,10 +60,11 @@ def chat_app(environ, start_response):
             if msg:
                 deal_msg(player, msg)
             else:
-                break
+                player_cancel(player)
 
     except geventwebsocket.WebSocketError, ex:
         print "{0}: {1}".format(ex.__class__.__name__, ex)
+        player_cancel(player)
 
 
 def deal_msg(player, msg):
@@ -85,6 +86,10 @@ def deal_msg(player, msg):
         print msg_dict 
         player.broad(msg_dict)
 
+def player_cancel(player):
+    if player in waiting_players:
+        waiting_players.remove(player)
+        
     
 def init_world_msg():
     data = {}

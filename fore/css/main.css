@@ -1,15 +1,15 @@
 html, body {
-			margin: 0;
-			padding: 0;
-            text-align: center;
-            font-style: monospace;
+	margin: 0;
+	padding: 0;
+    text-align: center;
+    font-style: normal;
 
-            background-color: blue;
+    background-color: blue;
 }
 
 #surface {
-            width: 600px;
-            height: 600px; 
+            width: 1000px;
+            height: 800px; 
 }
 
 #win {

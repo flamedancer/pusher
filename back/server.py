@@ -22,6 +22,8 @@ class Player(object):
         self.uid = ""
         self.opponent = None
 
+        self.statu = -1  # 0 等待  1找到对手   -1离开
+
     def send(self, msg):
         self.ws.send(json.dumps(msg)) 
 
@@ -46,10 +48,13 @@ def chat_app(environ, start_response):
     player = Player(ws)
     if not waiting_players:
         waiting_players.append(player)
+        player.statu = 1
     else:
         opponent = waiting_players.pop()
         player.opponent = opponent
         opponent.opponent = player
+        player.statu = 1
+        opponent.statu = 1
         
     if websocket is None:
         return static_wsgi_app(environ, start_response)
@@ -89,6 +94,12 @@ def deal_msg(player, msg):
 def player_cancel(player):
     if player in waiting_players:
         waiting_players.remove(player)
+    elif player.opponent and player.opponent.statu > 0:
+        print player.uid
+        player.statu = -1
+        msg_dict = {'c': 'disconnect'} 
+        player.send_opponent(msg_dict)
+        player.opponent = None
         
     
 def init_world_msg():

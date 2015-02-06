@@ -3,6 +3,9 @@ t_box = 2;
 t_ai = 3;
 pic = 50;
 Ai_num = 8;
+player_speed = 6;
+box_speed = 12;
+
 
 function main(gs) {
     /*** Define some different types of things ***/
@@ -30,7 +33,7 @@ function main(gs) {
         this.x = 0;
         this.y = 0;
 
-        this.speed = 3;
+        this.speed = player_speed;
 
         this.direction = [0, 0];
 
@@ -173,7 +176,7 @@ function main(gs) {
     function Pusher2(locate) {
         this.type = t_pusher;
         
-        this.speed = 3;
+        this.speed = player_speed;
         this.direction = [0, 0];
 
         //var all_directions = [[0, -1], [0, 1], [-1, 0], [1, 0]];
@@ -279,7 +282,7 @@ function main(gs) {
     function Box(id, locate) {
         this.type = t_box;
         this.direction = [0, 0];
-        this.speed = 6;
+        this.speed = box_speed;
         this.travel = 0;
 
         this.id = id;

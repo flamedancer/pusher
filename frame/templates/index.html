@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block body %}
+  <div class=show-messages>
+  <h2>所有游戏</h2>
+    <ul type="circle">
+      <li><a href="http://42.96.168.85/index.html" target="_blank">推箱子</a></li>
+    </ul>
+  </div>
+
+  <div class=show-games>
+  <h2>留言</h2>
+  <ul class=entries>
+  {% for entry in entries %}
+    <li>{{ entry.text|safe }}</li>
+  {% endfor %}
+  </ul>
+  </div>
+{% endblock %}

@@ -16,5 +16,6 @@ h2              { font-size: 1.2em; }
 .flash          { background: #cee5F5; padding: 0.5em;
                   border: 1px solid #aacbe2; }
 .error          { background: #f0d6d6; padding: 0.5em; }
-.show-messages   {width:30%; float: left; border: 10px; background-color:#ffff99;}
-.show-games   {width:70%; float: left; border:10px; background-color:#EEEEEE;}
+.show-messages   {width:68%; height: 60%; float: left; margin-left: 10px; background-color:#ffff99;}
+.show-games   {width:30%; height: 90%; float: left; margin-left:2px; background-color:#EEEEEE;}
+.new-message   {width:68%; height: 29%; float: left; margin:8px; background-color:#aaaaaa;}

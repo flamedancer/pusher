@@ -78,7 +78,7 @@ def login():
         username = request.form['username']
         password = request.form['password']
         cx = g.db.cursor()
-        cx.execute('select password from admins where username=%s' % username)
+        cx.execute('select password from admins where username=?',[username])
         results = cx.fetchall()
         if request.form['username'] == app.config['USERNAME']:
             error = 'Invalid username'

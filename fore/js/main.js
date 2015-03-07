@@ -22,7 +22,7 @@ function main(gs) {
     pusher2 = new Pusher2(0);
 
 
-    var s = new WebSocket("ws://127.0.0.1:9091/foobar/");
+    var s = new WebSocket("ws://42.96.168.85:9091/foobar/");
     s.onopen = function() {
     //alert("connected !!!");
         s.send('{"c":"w"}');   // begin  command

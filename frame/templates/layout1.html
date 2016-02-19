@@ -1,0 +1,19 @@
+<!doctype html>
+<title>造物者•初级</title>
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+<div class=page>
+  <div class=metanav>
+    <a class=home_tag href="{{ url_for('index') }}">主页</a>
+  {% if not session.logged_in %}
+    <a href="{{ url_for('login') }}">登入</a>/
+    <a href="{{ url_for('register') }}">注册</a>
+  {% else %}
+    <b class=username_tag>您好：<a href="{{ url_for('show_entries') }}">{{ session.username }}</a></b>
+    <a class=inout_tag href="{{ url_for('logout') }}">退出</a>
+  {% endif %}
+  </div>
+  {% for message in get_flashed_messages() %}
+    <div class=flash>{{ message }}</div>
+  {% endfor %}
+  {% block body %}{% endblock %}
+</div>

@@ -1,28 +1,9 @@
-{% extends "layout.html" %}
-{% block body %}
-  <div class=show-games>
-  <h2>所有游戏</h2>
-    <ul type="circle">
-      <li><a href="http://42.96.168.85/index.html" target="_blank">推箱子</a></li>
-    </ul>
-  </div>
+{% extends "bottom.html" %}
 
-  <div class=show-messages>
-  <h2>留言</h2>
-  <ul class=entries>
-  {% for entry in entries %}
-    <li>{{ entry.text|safe }}</li>
-  {% endfor %}
-  </ul>
-  </div>
+<script src="http://libs.baidu.com/jquery/1.7.2/jquery.min.js"></script>
+<script src="http://libs.baidu.com/jqueryui/1.8.22/jquery-ui.min.js"></script>
 
-  <div class=new-message>
-    <form action='add_entry' method=post class=add-entry>
-      <dl>
-        <dt>新留言</dt>
-        <dd><textarea name=text rows=10 cols=80></textarea></dd>
-        <dd><input type=submit value=发布></input></dd>
-      </dl>
-    </form>
-  </div>
-{% endblock %}
+<script src="assets/js/jquery.desktop.js"></script>
+
+</body>
+</html>
